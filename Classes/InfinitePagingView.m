@@ -88,6 +88,10 @@
 
 - (void)layoutPages
 {
+    for(UIView * v in _innerScrollView.subviews) {
+        [v removeFromSuperview];
+    }
+    
     if (_scrollDirection == InfinitePagingViewHorizonScrollDirection) {
         CGFloat left_margin = (self.frame.size.width - _pageSize.width) / 2;
         _innerScrollView.frame = CGRectMake(left_margin, 0.f, _pageSize.width, self.frame.size.height);
