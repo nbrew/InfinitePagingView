@@ -68,9 +68,44 @@
     if (nil == _pageViews) {
         _pageViews = [NSMutableArray array];
     }
+
+    int numPageViews = [_pageViews count];
+    
+    // prepopulate our array
+    NSMutableArray *newArray = [NSMutableArray array];
+    for (int i = 0; i < numPageViews + 1; i++) {
+        [newArray addObject:[NSNull null]];
+    }
+
+    NSInteger newOffet = floor((numPageViews + 1) / 2);
+    NSLog(@"New offset: %d", newOffet);
+    
+    for (int i = 0; i < numPageViews; i++) {
+        UIView *objecToInsert = [_pageViews objectAtIndex:(i + _lastPageIndex) % numPageViews];
+        NSInteger indexToInsert = (i + newOffet ) % (numPageViews + 1);
+        
+        [newArray replaceObjectAtIndex:indexToInsert withObject:objecToInsert];
+    }
+    
+    NSInteger newOffsetIndex = (numPageViews + newOffet ) % (numPageViews + 1);
+    
+    [newArray replaceObjectAtIndex:newOffsetIndex withObject:pageView];
+    
+    _pageViews = newArray;
+    
+    [self layoutPages];
+}
+
+/*
+- (void)addPageView:(UIView *)pageView
+{
+    if (nil == _pageViews) {
+        _pageViews = [NSMutableArray array];
+    }
     [_pageViews addObject:pageView];
     [self layoutPages];
 }
+*/
 
 - (void)scrollToPreviousPage
 {
