@@ -12,7 +12,7 @@ Features
 - Each page view contents are available to a UIView based custom view.
 - Implements paging delegate protocol.
 - Page scroll action methods.
- 
+
 
 Requirements
 ------------
@@ -36,10 +36,10 @@ How to use
 - (void)loadView
 {
     [super loadView];
-    
+
     // create instance.
     InfinitePagingView *pagingView = [[InfinitePagingView alloc] initWithFrame:CGRectMake(0.f, 30.f, 100.f, 50.f)];
-    
+
     // Adding each page views.(UIView based)
     // (At least 3 pages.)
     UIImageView *page1View = [[UIImageView alloc] initWithFrame:frame];
@@ -49,12 +49,25 @@ How to use
     [pagingView addPageView:page3View];
     [pagingView addPageView:page4View];
     [pagingView addPageView:page5View];
-    
+
     [self.view addSubview:pagingView];
 }
 ```
 
 Build and run the project files. Enjoy more examples!
+
+Handling Rotation
+-----------------
+
+In your view controller:
+
+```Objective-C
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [pagingView setFrame:CGRectMake(0.f, 0.f, self.view.bounds.size.width, self.view.bounds.size.height)];
+    [pagingView updatePageFrames];
+}
+```
 
 Public methods
 --------
@@ -78,6 +91,12 @@ Scroll to the previous page.
 ```
 Scroll to the next page.
 
+-
+
+```Objective-C
+- (void)updatePageFrames;
+```
+Updates every page's frame based on the current pagingView frame.
 
 
 InfinitePagingViewDelegate Protocols

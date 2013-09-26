@@ -7,13 +7,13 @@
 
 /**
  This is the MIT License.
- 
+
  Copyright (c) 2012 SHIGETA Takuji.
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
@@ -46,10 +46,12 @@
         _innerScrollView.scrollEnabled = YES;
         _innerScrollView.showsHorizontalScrollIndicator = NO;
         _innerScrollView.showsVerticalScrollIndicator = NO;
+
         _scrollDirection = InfinitePagingViewHorizonScrollDirection;
         [self addSubview:_innerScrollView];
-        self.pageSize = frame.size;
     }
+    // update pageSize every time to handle rotation correctly
+    self.pageSize = frame.size;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -70,7 +72,7 @@
     }
 
     int numPageViews = [_pageViews count];
-    
+
     // prepopulate our array
     NSMutableArray *newArray = [NSMutableArray array];
     for (int i = 0; i < numPageViews + 1; i++) {
@@ -79,33 +81,22 @@
 
     NSInteger newOffet = floor((numPageViews + 1) / 2);
     NSLog(@"New offset: %d", newOffet);
-    
+
     for (int i = 0; i < numPageViews; i++) {
         UIView *objecToInsert = [_pageViews objectAtIndex:(i + _lastPageIndex) % numPageViews];
         NSInteger indexToInsert = (i + newOffet ) % (numPageViews + 1);
-        
+
         [newArray replaceObjectAtIndex:indexToInsert withObject:objecToInsert];
     }
-    
-    NSInteger newOffsetIndex = (numPageViews + newOffet ) % (numPageViews + 1);
-    
-    [newArray replaceObjectAtIndex:newOffsetIndex withObject:pageView];
-    
-    _pageViews = newArray;
-    
-    [self layoutPages];
-}
 
-/*
-- (void)addPageView:(UIView *)pageView
-{
-    if (nil == _pageViews) {
-        _pageViews = [NSMutableArray array];
-    }
-    [_pageViews addObject:pageView];
+    NSInteger newOffsetIndex = (numPageViews + newOffet ) % (numPageViews + 1);
+
+    [newArray replaceObjectAtIndex:newOffsetIndex withObject:pageView];
+
+    _pageViews = newArray;
+
     [self layoutPages];
 }
-*/
 
 - (void)scrollToPreviousPage
 {
@@ -119,6 +110,23 @@
     [self performSelector:@selector(scrollViewDidEndDecelerating:) withObject:_innerScrollView afterDelay:0.5f]; // delay until scroll animation end.
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self layoutPages];
+}
+
+- (void)updatePageFrames
+{
+    int numViews = [_pageViews count];
+    for (int idx=0; idx<numViews; idx++) {
+        CGRect frame = self.frame;
+        frame.origin.x = CGRectGetWidth(frame) * idx;
+        frame.origin.y = 0;
+        [[_pageViews objectAtIndex:idx] setFrame:frame];
+    }
+}
+
 #pragma mark - Private methods
 
 - (void)layoutPages
@@ -126,7 +134,7 @@
     for(UIView * v in _innerScrollView.subviews) {
         [v removeFromSuperview];
     }
-    
+
     if (_scrollDirection == InfinitePagingViewHorizonScrollDirection) {
         CGFloat left_margin = (self.frame.size.width - _pageSize.width) / 2;
         _innerScrollView.frame = CGRectMake(left_margin, 0.f, _pageSize.width, self.frame.size.height);
@@ -163,14 +171,14 @@
     if (_scrollDirection == InfinitePagingViewHorizonScrollDirection) {
         if (0 != fmodf(_innerScrollView.contentOffset.x, _pageSize.width)) return ;
         adjustScrollRect = CGRectMake(_innerScrollView.contentOffset.x - _innerScrollView.frame.size.width * moveDirection,
-                                      _innerScrollView.contentOffset.y, 
+                                      _innerScrollView.contentOffset.y,
                                       _innerScrollView.frame.size.width, _innerScrollView.frame.size.height);
     } else {
         if (0 != fmodf(_innerScrollView.contentOffset.y, _pageSize.height)) return ;
         adjustScrollRect = CGRectMake(_innerScrollView.contentOffset.x,
                                       _innerScrollView.contentOffset.y - _innerScrollView.frame.size.height * moveDirection,
                                       _innerScrollView.frame.size.width, _innerScrollView.frame.size.height);
-        
+
     }
     [_innerScrollView scrollRectToVisible:adjustScrollRect animated:animated];
 }
@@ -213,7 +221,7 @@
     } else {
         pageIndex = _innerScrollView.contentOffset.y / _innerScrollView.frame.size.height;
     }
-    
+
     NSInteger moveDirection = pageIndex - _lastPageIndex;
     if (moveDirection == 0) {
         return;
@@ -235,7 +243,7 @@
     if (pageIndex > _pageViews.count - 1) {
         pageIndex = _pageViews.count - 1;
     }
-    
+
     NSUInteger idx = 0;
     for (UIView *pageView in _pageViews) {
         UIView *pageView = [_pageViews objectAtIndex:idx];
