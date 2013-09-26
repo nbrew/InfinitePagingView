@@ -5,7 +5,13 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/nbrew/InfinitePagingView"
 
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
-  s.author       = { "Ben Scheirman" => "ben@scheirman.com" }
+  s.author       = {
+                      "SHIGETA Takuji" => "takuji@qnote.co.jp",
+                      "alegch"         => "alegch@bk.ru",
+                      "Shreesh Garg"   => "garg,shreesh@gmail.com",
+                      "Nathan Hyde"    => "nhyde@bigdrift.com"
+                   }
+
   s.source       = {
     :git => "https://github.com/nbrew/InfinitePagingView.git",
     :tag => "0.0.1"

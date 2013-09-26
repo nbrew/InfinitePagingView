@@ -13,11 +13,19 @@ Features
 - Implements paging delegate protocol.
 - Page scroll action methods.
 
-
 Requirements
 ------------
 - iOS 4+
 - Xcode 4.3 (Use ARC)
+
+Modifications
+-------------
+
+This version contains the following additions (from the stock caesarcat/InfinitePagingView):
+
+- Paging begins on the first page view loaded, and pages in the order pages are loaded. Author: @alegch
+- Clear subviews from _innerScrollView before adding pageViews. Author: @ShreeshGarg
+- Support device rotation while respecting the overall view frame.
 
 Screenshots
 -----------
@@ -144,3 +152,4 @@ License
 MIT License.
 
 See LICENSE.txt for more information.
+
