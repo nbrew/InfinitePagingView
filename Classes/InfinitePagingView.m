@@ -80,7 +80,7 @@
     }
 
     NSInteger newOffet = floor((numPageViews + 1) / 2);
-    NSLog(@"New offset: %d", newOffet);
+    NSLog(@"New offset: %ld", (long)newOffet);
 
     for (int i = 0; i < numPageViews; i++) {
         UIView *objecToInsert = [_pageViews objectAtIndex:(i + _lastPageIndex) % numPageViews];
