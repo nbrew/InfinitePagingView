@@ -6,6 +6,12 @@ Overview
 --------
 InfinitePagingView is a subclass of UIView. It contains an endlessly scrollable UIScrollView.
 
+
+[CocoaPods]
+--------
+	pod `InfinitePagingView`
+
+
 Features
 --------
 - Endlessly scrollable to horizontal (or vertical) direction.
@@ -149,7 +155,6 @@ Tells the delegate that the scroll view has ended decelerating the scrolling mov
 
 License
 -------
-MIT License.
+This software is released under the MIT License, see LICENSE.txt.
 
 See LICENSE.txt for more information.
-
