@@ -333,9 +333,11 @@
 		B7C454B11578D025003FC537 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "InfinitePagingViewExamples/InfinitePagingView-Prefix.pch";
 				INFOPLIST_FILE = "InfinitePagingViewExamples/InfinitePagingView-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -344,9 +346,11 @@
 		B7C454B21578D025003FC537 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "InfinitePagingViewExamples/InfinitePagingView-Prefix.pch";
 				INFOPLIST_FILE = "InfinitePagingViewExamples/InfinitePagingView-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
