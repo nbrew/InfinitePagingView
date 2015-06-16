@@ -23,7 +23,8 @@
 {
     UIScrollView *_innerScrollView;
     NSMutableArray *_pageViews;
-    NSInteger _lastPageIndex;
+//    NSInteger _lastPageIndex;
+    int _lastPageIndex;
 }
 
 @synthesize pageSize = _pageSize;
@@ -71,7 +72,7 @@
         _pageViews = [NSMutableArray array];
     }
 
-    int numPageViews = [_pageViews count];
+    int numPageViews = (int)[_pageViews count];
 
     // prepopulate our array
     NSMutableArray *newArray = [NSMutableArray array];
@@ -118,7 +119,7 @@
 
 - (void)updatePageFrames
 {
-    int numViews = [_pageViews count];
+    int numViews = (int)[_pageViews count];
     for (int idx=0; idx<numViews; idx++) {
         CGRect frame = self.frame;
         frame.origin.x = CGRectGetWidth(frame) * idx;
@@ -215,14 +216,16 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    NSInteger pageIndex = 0;
+//    NSInteger pageIndex = 0;
+    int pageIndex = 0;
     if (_scrollDirection == InfinitePagingViewHorizonScrollDirection) {
         pageIndex = _innerScrollView.contentOffset.x / _innerScrollView.frame.size.width;
     } else {
         pageIndex = _innerScrollView.contentOffset.y / _innerScrollView.frame.size.height;
     }
 
-    NSInteger moveDirection = pageIndex - _lastPageIndex;
+//    NSInteger moveDirection = pageIndex - _lastPageIndex;
+    int moveDirection = pageIndex - _lastPageIndex;
     
     //NSLog(@"pageIndex: %i %i %i",moveDirection, pageIndex, _lastPageIndex);
     //fails when we have : 0 1 1        2 Views
@@ -235,7 +238,7 @@
         
         moveDirection = 1;
         
-        for (NSUInteger i = 0; i < abs((int)moveDirection); ++i) {
+        for (NSUInteger i = 0; i < abs(moveDirection); ++i) {
             UIView *leftView = [_pageViews objectAtIndex:0];
             [_pageViews removeObjectAtIndex:0];
             [_pageViews insertObject:leftView atIndex:_pageViews.count];
@@ -258,18 +261,19 @@
         pageIndex += abs(moveDirection);
     }
     if (pageIndex > _pageViews.count - 1) {
-        pageIndex = _pageViews.count - 1;
+        pageIndex = (int)(_pageViews.count - 1);
     }
 
-    NSUInteger idx = 0;
-    for (UIView *pageView in _pageViews) {
+    NSUInteger numViews = [_pageViews count];
+    for (NSUInteger idx = 0; idx < numViews; ++idx) {
+//    for (UIView *pageView in _pageViews) {
         UIView *pageView = [_pageViews objectAtIndex:idx];
         if (_scrollDirection == InfinitePagingViewHorizonScrollDirection) {
             pageView.center = CGPointMake(idx * _innerScrollView.frame.size.width + _innerScrollView.frame.size.width / 2, _innerScrollView.center.y);
         } else {
             pageView.center = CGPointMake(_innerScrollView.center.x, idx * (_innerScrollView.frame.size.height) + (_innerScrollView.frame.size.height / 2));
         }
-        ++idx;
+//        ++idx;
     }
     [self scrollToDirection:moveDirection animated:NO];
 
